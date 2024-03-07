@@ -4,13 +4,13 @@
   <div class="trending-list">
     <h2>{{ title }}</h2>
     <ul>
-      <li v-for="movie in movieList" :key="movie.id">
-        <v-card class="trending-list-item">
+      <li v-for="item in listItems" :key="item.id">
+        <v-card class="trending-list-item" @click="showDetails(item)">
           <v-img
-            :src="`${baseUrl}w500${movie.poster_path}`"
+            :src="`${baseUrl}w500${item.poster_path}`"
             class="white--text align-end item-image"
           >
-            <v-card-title>{{ movie.title }}</v-card-title>
+            <v-card-title>{{ item.title || item.name }}</v-card-title>
           </v-img>
         </v-card>
       </li>
@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-
 const BASE_URL = "https://image.tmdb.org/t/p/";
 
 export default Vue.extend({
@@ -30,28 +29,69 @@ export default Vue.extend({
       type: String,
       required: true,
     },
-    movieList: {
-      type: Array as () => Movie[],
+    listItems: {
+      type: Array as () => Item[],
       required: true,
     },
   },
+  mounted() {
+    console.log("movielist,", this.listItems);
+  },
+
   data() {
     return {
       baseUrl: BASE_URL,
     };
   },
+
+  methods: {
+    showDetails(item: Item) {
+      this.$emit("show-details", {
+        item,
+        imageUrl: `${this.baseUrl}w500${item.backdrop_path}`,
+      });
+    },
+  },
 });
 
-// Define interfaces for Movie and TVShow
-interface Movie {
+interface Item {
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   src: string;
+  backdrop_path: {
+    type: string;
+    required: true;
+  };
+  poster_path: {
+    type: string;
+    required: true;
+  };
+  overview: {
+    type: string;
+    required: true;
+  };
+  release_date?: {
+    type: string;
+    required: true;
+  };
+  first_air_date?: {
+    type: string;
+    required: true;
+  };
+  vote_average: {
+    type: number;
+    required: true;
+  };
 }
 </script>
 
 <style scoped lang="scss">
 .trending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
   ul {
     display: flex;
     gap: 20px;
