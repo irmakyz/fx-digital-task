@@ -3,6 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import { GETTERS, MUTATIONS, ACTIONS } from "./constants";
+import { Item } from "@/interfaces";
 
 Vue.use(Vuex);
 
@@ -10,14 +11,14 @@ const apiKey = "e0ed1eadd9e6e0345cc77825f3a6e9b9";
 const baseURL = "https://api.themoviedb.org/3";
 
 interface RootState {
-  trendingMovies: [];
-  trendingTVShows: [];
+  trendingMovies: Item[];
+  trendingTVShows: Item[];
 }
 
 export default new Vuex.Store<RootState>({
   state: {
-    trendingMovies: [],
-    trendingTVShows: [],
+    trendingMovies: [] as Item[],
+    trendingTVShows: [] as Item[],
   },
   mutations: {
     [MUTATIONS.SET_TRENDING_MOVIES](state, movies: []) {

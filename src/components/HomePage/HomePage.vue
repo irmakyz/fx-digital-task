@@ -1,12 +1,31 @@
 <template>
   <div class="home-page">
+    <v-toolbar class="home-page__toolbar">
+      <img src="@/assets/logo.png" alt="Logo" class="home-page__toolbar-logo" />
+
+      <v-spacer></v-spacer>
+      <v-slide-x-reverse-transition>
+        <v-text-field
+          v-if="isSearchVisible"
+          v-model="searchQuery"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-slide-x-reverse-transition>
+
+      <v-btn icon @click="toggleSearch">
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-toolbar>
+
     <TrendingList
-      :list-items="trendingMovies"
+      :list-items="filteredTrendingMovies"
       :title="trendingMoviesTitle"
       @show-details="openDetailsDialog"
     />
     <TrendingList
-      :list-items="trendingTVShows"
+      :list-items="filteredTrendingTVShows"
       :title="trendingTVShowsTitle"
       @show-details="openDetailsDialog"
     />
@@ -40,19 +59,33 @@ export default Vue.extend({
       item: {},
       imageUrl: "",
       isDialogOpen: false,
+      searchQuery: "",
+      isSearchVisible: false,
     };
   },
   async beforeMount() {
     await this.fetchTrendingMovies();
     await this.fetchTrendingTVShows();
   },
-  watch: {
-    trendingMovies() {
-      console.log(this.trendingMovies);
-    },
-  },
+
   computed: {
     ...mapState(["trendingMovies", "trendingTVShows"]),
+
+    filteredTrendingMovies() {
+      if (!this.searchQuery) return this.trendingMovies;
+      return this.trendingMovies.filter((movie) =>
+        movie.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+
+    filteredTrendingTVShows() {
+      if (!this.searchQuery) return this.trendingTVShows;
+      return this.trendingTVShows.filter((show) =>
+        (show.title || show.name)
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase())
+      );
+    },
   },
   methods: {
     async fetchTrendingMovies() {
@@ -73,6 +106,9 @@ export default Vue.extend({
     closeDetailsDialog() {
       this.isDialogOpen = false;
     },
+    toggleSearch() {
+      this.isSearchVisible = !this.isSearchVisible;
+    },
   },
 });
 </script>
@@ -80,5 +116,14 @@ export default Vue.extend({
 <style scoped lang="scss">
 .home-page {
   padding: 30px;
+  .home-page__toolbar {
+    box-shadow: 0 4px 6px -6px black;
+    background: transparent;
+    margin-bottom: 30px;
+  }
+  .home-page__toolbar-logo {
+    max-height: 100%;
+    width: auto;
+  }
 }
 </style>

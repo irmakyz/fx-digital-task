@@ -2,7 +2,7 @@
 
 <template>
   <div class="trending-list">
-    <h2>{{ title }}</h2>
+    <h2 class="trending-list__title">{{ title }}</h2>
     <ul>
       <li v-for="item in listItems" :key="item.id">
         <v-card class="trending-list-item" @click="showDetails(item)">
@@ -21,6 +21,7 @@
 <script lang="ts">
 import Vue from "vue";
 const BASE_URL = "https://image.tmdb.org/t/p/";
+import { Item } from "../../interfaces/index";
 
 export default Vue.extend({
   name: "TrendingList",
@@ -53,37 +54,6 @@ export default Vue.extend({
     },
   },
 });
-
-interface Item {
-  id: number;
-  title?: string;
-  name?: string;
-  src: string;
-  backdrop_path: {
-    type: string;
-    required: true;
-  };
-  poster_path: {
-    type: string;
-    required: true;
-  };
-  overview: {
-    type: string;
-    required: true;
-  };
-  release_date?: {
-    type: string;
-    required: true;
-  };
-  first_air_date?: {
-    type: string;
-    required: true;
-  };
-  vote_average: {
-    type: number;
-    required: true;
-  };
-}
 </script>
 
 <style scoped lang="scss">
@@ -92,6 +62,7 @@ interface Item {
   flex-direction: column;
   gap: 20px;
   margin-bottom: 30px;
+  padding-inline: 38px;
   ul {
     display: flex;
     gap: 20px;
