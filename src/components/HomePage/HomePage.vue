@@ -1,5 +1,5 @@
 <template>
-  <div class="home-page">
+  <div class="home-page" @keydown="handleKeyDown" tabindex="0">
     <v-toolbar class="home-page__toolbar">
       <img src="@/assets/logo.png" alt="Logo" class="home-page__toolbar-logo" />
 
@@ -8,13 +8,23 @@
         <v-text-field
           v-if="isSearchVisible"
           v-model="searchQuery"
+          id="110"
+          ref="110"
+          :tabindex="activeItemId === 110 ? 0 : -1"
           label="Search"
           single-line
           hide-details
         ></v-text-field>
       </v-slide-x-reverse-transition>
 
-      <v-btn icon @click="toggleSearch">
+      <v-btn
+        icon
+        @click="toggleSearch"
+        :outlined="activeItemId === 120"
+        ref="120"
+        id="120"
+        :tabindex="activeItemId === 120 ? 0 : -1"
+      >
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-toolbar>
@@ -22,11 +32,15 @@
     <TrendingList
       :list-items="filteredTrendingMovies"
       :title="trendingMoviesTitle"
+      :active-item-id="activeItemId"
+      :is-key-entered="isKeyEntered"
       @show-details="openDetailsDialog"
     />
     <TrendingList
       :list-items="filteredTrendingTVShows"
       :title="trendingTVShowsTitle"
+      :active-item-id="activeItemId"
+      :is-key-entered="isKeyEntered"
       @show-details="openDetailsDialog"
     />
     <TrendingItemDetails
@@ -61,6 +75,8 @@ export default Vue.extend({
       isDialogOpen: false,
       searchQuery: "",
       isSearchVisible: false,
+      activeItemId: null,
+      isKeyEntered: false,
     };
   },
   async beforeMount() {
@@ -86,6 +102,32 @@ export default Vue.extend({
           .includes(this.searchQuery.toLowerCase())
       );
     },
+
+    filteredTrendingMoviesById() {
+      return this.filteredTrendingMovies.map((movie) => {
+        return {
+          id: movie.id,
+        };
+      });
+    },
+
+    filteredTrendingTVShowsById() {
+      return this.filteredTrendingTVShows.map((tv) => {
+        return {
+          id: tv.id,
+        };
+      });
+    },
+
+    listForNavigation() {
+      return [{ id: 110 }, { id: 120 }]
+        .concat(
+          this.filteredTrendingMoviesById.concat(
+            this.filteredTrendingTVShowsById
+          )
+        )
+        .flat();
+    },
   },
   methods: {
     async fetchTrendingMovies() {
@@ -108,6 +150,31 @@ export default Vue.extend({
     },
     toggleSearch() {
       this.isSearchVisible = !this.isSearchVisible;
+    },
+    handleKeyDown(event: KeyboardEvent) {
+      const currentIndex = this.listForNavigation.findIndex(
+        (item) => item.id === this.activeItemId
+      );
+
+      if (event.key === "Enter") {
+        if (this.activeItemId === 120 || this.activeItemId === 110) {
+          this.$refs[this.activeItemId].$el.click();
+        } else {
+          this.isKeyEntered = true;
+        }
+      } else if (event.key === "ArrowRight") {
+        this.activeItemId =
+          currentIndex < this.listForNavigation.length - 1
+            ? this.listForNavigation[currentIndex + 1].id
+            : this.listForNavigation[0].id;
+        this.isKeyEntered = false;
+      } else if (event.key === "ArrowLeft") {
+        this.activeItemId =
+          currentIndex > 0
+            ? this.listForNavigation[currentIndex - 1].id
+            : this.listForNavigation[this.listForNavigation.length - 1].id;
+        this.isKeyEntered = false;
+      }
     },
   },
 });
