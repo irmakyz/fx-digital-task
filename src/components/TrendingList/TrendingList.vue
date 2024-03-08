@@ -4,7 +4,12 @@
   <div class="trending-list">
     <h2 class="trending-list__title">{{ title }}</h2>
     <ul class="trending-list__items">
-      <li v-for="item in listItems" :key="item.id" @click="showDetails(item)">
+      <li
+        v-for="item in listItems"
+        :key="item.id"
+        @click="showDetails(item)"
+        :data-id="item.id"
+      >
         <v-card
           @click="showDetails(item)"
           :class="{
