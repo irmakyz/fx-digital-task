@@ -6,7 +6,7 @@
     content-class="item-details"
     :max-width="responsiveWidth"
   >
-    <v-card class="mx-auto">
+    <v-card class="mx-auto item-details__content">
       <v-img :src="imageUrl"></v-img>
 
       <v-card-title class="item-details__title">
@@ -59,13 +59,13 @@ export default {
     responsiveWidth() {
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
-          return 500;
+          return 300;
         case "sm":
           return 500;
         case "md":
-          return 1000;
+          return 500;
         case "lg":
-          return 1000;
+          return 700;
         case "xl":
           return 1000;
         default:
@@ -81,8 +81,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@media (min-width: 1500px) {
-  .item-details {
+.item-details {
+  .item-details__content {
+    overflow: auto;
+  }
+
+  @media (min-width: 1500px) {
     .item-details__subtitle {
       font-size: 20px;
     }
