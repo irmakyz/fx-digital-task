@@ -2,17 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import { GETTERS, MUTATIONS, ACTIONS } from "./constants";
-import { Item } from "@/interfaces";
+import { Item, RootState } from "@/interfaces";
 
 Vue.use(Vuex);
 
 const apiKey = "e0ed1eadd9e6e0345cc77825f3a6e9b9";
 const baseURL = "https://api.themoviedb.org/3";
-
-interface RootState {
-  trendingMovies: Item[];
-  trendingTVShows: Item[];
-}
 
 export default new Vuex.Store<RootState>({
   state: {
@@ -37,6 +32,7 @@ export default new Vuex.Store<RootState>({
         });
         commit("setTrendingMovies", response.data.results);
       } catch (error) {
+        // eslint-disable-next-line
         console.error("Error fetching trending movies:", error);
         throw error;
       }
@@ -50,6 +46,7 @@ export default new Vuex.Store<RootState>({
         });
         commit("setTrendingTVShows", response.data.results);
       } catch (error) {
+        // eslint-disable-next-line
         console.error("Error fetching trending TV shows:", error);
         throw error;
       }

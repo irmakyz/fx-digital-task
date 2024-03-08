@@ -1,9 +1,9 @@
 import { shallowMount } from "@vue/test-utils";
 import TrendingItemDetails from "@/components/TrendingItemDetails/TrendingItemDetails.vue";
+import { Item } from "@/interfaces";
 
 describe("TrendingItemDetails.vue", () => {
   let wrapper;
-
   beforeEach(() => {
     wrapper = shallowMount(TrendingItemDetails, {
       propsData: {
@@ -12,7 +12,7 @@ describe("TrendingItemDetails.vue", () => {
           overview: "Test Overview",
           release_date: "2022-01-01",
           vote_average: 8.5,
-        },
+        } as Item,
         imageUrl: "test_image_url",
         isDialogOpen: false,
       },
@@ -22,6 +22,7 @@ describe("TrendingItemDetails.vue", () => {
   it("renders the details correctly when isDialogOpen is true", async () => {
     await wrapper.setProps({ isDialogOpen: true });
     await wrapper.vm.$nextTick();
+    console.log(wrapper.html());
 
     expect(wrapper.vm.dialog).toBe(true);
     expect(wrapper.find("v-card-title-stub").text()).toBe("Test Title");

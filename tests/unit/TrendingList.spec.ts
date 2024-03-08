@@ -1,33 +1,44 @@
-import { shallowMount, createLocalVue, Wrapper } from "@vue/test-utils";
+import { shallowMount, createLocalVue } from "@vue/test-utils";
 import TrendingList from "@/components/TrendingList/TrendingList.vue";
 import { Item } from "@/interfaces";
+import Vue, { VueConstructor } from "vue";
 
-const localVue = createLocalVue();
+const localVue: VueConstructor<Vue> = createLocalVue();
+
+interface TrendingListProps {
+  title: string;
+  listItems: Item[];
+  activeItemId: number;
+  isKeyEntered: boolean;
+}
 
 describe("TrendingList.vue", () => {
   let wrapper;
+
   beforeEach(() => {
+    const propsData: TrendingListProps = {
+      title: "Test Title",
+      listItems: [
+        {
+          id: 1,
+          title: "Movie 1",
+          backdrop_path: "/path/to/image1.jpg",
+          poster_path: "/path/to/image1.jpg",
+        } as Item,
+        {
+          id: 2,
+          title: "Movie 2",
+          backdrop_path: "/path/to/image2.jpg",
+          poster_path: "/path/to/image2.jpg",
+        } as Item,
+      ],
+      activeItemId: 1,
+      isKeyEntered: false,
+    };
+
     wrapper = shallowMount(TrendingList, {
       localVue,
-      propsData: {
-        title: "Test Title",
-        listItems: [
-          {
-            id: 1,
-            title: "Movie 1",
-            backdrop_path: "/path/to/image1.jpg",
-            poster_path: "/path/to/image1.jpg",
-          } as Item,
-          {
-            id: 2,
-            title: "Movie 2",
-            backdrop_path: "/path/to/image2.jpg",
-            poster_path: "/path/to/image2.jpg",
-          } as Item,
-        ],
-        activeItemId: 1,
-        isKeyEntered: false,
-      },
+      propsData,
     });
   });
 
@@ -60,17 +71,18 @@ describe("TrendingList.vue", () => {
 
   it("scrolls into view when activeItemId changes", async () => {
     const scrollIntoViewSpy = jest.fn();
-    wrapper.vm.$refs[2][0].$el.scrollIntoView = scrollIntoViewSpy;
+    (wrapper.vm.$refs[2][0].$el as HTMLElement).scrollIntoView =
+      scrollIntoViewSpy;
     await wrapper.setProps({ activeItemId: 2 });
     await wrapper.vm.$nextTick();
-    expect(wrapper.vm.$refs[2][0].$el.scrollIntoView).toHaveBeenCalledWith({
+    expect(scrollIntoViewSpy).toHaveBeenCalledWith({
       behavior: "smooth",
     });
   });
 
   it("clicks the active item element when isKeyEntered is true", async () => {
     const clickSpy = jest.fn();
-    wrapper.vm.$refs[1][0].$el.click = clickSpy;
+    (wrapper.vm.$refs[1][0].$el as HTMLElement).click = clickSpy;
     wrapper.setProps({ isKeyEntered: true });
     await wrapper.vm.$nextTick();
     expect(clickSpy).toHaveBeenCalled();

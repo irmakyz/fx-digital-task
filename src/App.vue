@@ -17,8 +17,6 @@ export default Vue.extend({
     HomePage,
   },
 
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
 });
 </script>

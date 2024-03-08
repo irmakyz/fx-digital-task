@@ -27,35 +27,49 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import { Item, ItemDetails } from "@/interfaces";
+
 export default {
   name: "TrendingItemDetails",
   props: {
-    item: Object,
-    imageUrl: String,
-    isDialogOpen: Boolean,
+    item: {
+      type: Object as () => Item,
+    },
+    imageUrl: {
+      type: String,
+    },
+    isDialogOpen: {
+      type: Boolean,
+    },
   },
   data() {
-    return {
-      dialog: false,
-    };
+    return { dialog: false };
   },
   watch: {
-    isDialogOpen() {
-      this.dialog = this.isDialogOpen;
+    isDialogOpen(newVal: boolean) {
+      this.dialog = newVal;
     },
   },
   computed: {
-    itemDetails() {
+    itemDetails(): ItemDetails {
       return {
         title: this.item.title || this.item.name,
-        imgUrl: this.imgUrl,
+        imgUrl: this.imageUrl,
         overview: this.item.overview,
         releaseDate: this.item.release_date || this.item.first_air_date,
         voteAvg: this.item.vote_average,
       };
     },
-    responsiveWidth() {
+
+    responsiveWidth(): number {
+      if (
+        !this.$vuetify ||
+        !this.$vuetify.breakpoint ||
+        !this.$vuetify.breakpoint.name
+      )
+        return 500;
+
       switch (this.$vuetify.breakpoint.name) {
         case "xs":
           return 300;
@@ -73,7 +87,8 @@ export default {
     },
   },
   methods: {
-    closeDialog() {
+    // eslint-disable-next-line
+    closeDialog(this: any): void {
       this.$emit("close-details");
     },
   },

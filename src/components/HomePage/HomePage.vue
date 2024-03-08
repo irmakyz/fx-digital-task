@@ -57,27 +57,29 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapState } from "vuex";
-const TrendingList = () => import("@/components/TrendingList/TrendingList.vue");
-const TrendingItemDetails = () =>
-  import("@/components/TrendingItemDetails/TrendingItemDetails.vue");
+
+import TrendingList from "@/components/TrendingList/TrendingList.vue";
+import TrendingItemDetails from "@/components/TrendingItemDetails/TrendingItemDetails.vue";
 
 import { ACTIONS } from "../../store/constants";
+import { Item } from "@/interfaces";
+
 export default Vue.extend({
   name: "HomePage",
   components: {
     TrendingList,
     TrendingItemDetails,
   },
-  data: function () {
+  data() {
     return {
       trendingMoviesTitle: "Trending Movies",
       trendingTVShowsTitle: "Trending TV Shows",
-      item: {},
+      item: {} as Item,
       imageUrl: "",
       isDialogOpen: false,
       searchQuery: "",
       isSearchVisible: false,
-      activeItemId: null,
+      activeItemId: null as number | null,
       isKeyEntered: false,
     };
   },
@@ -89,14 +91,14 @@ export default Vue.extend({
   computed: {
     ...mapState(["trendingMovies", "trendingTVShows"]),
 
-    filteredTrendingMovies() {
+    filteredTrendingMovies(): Item[] {
       if (!this.searchQuery) return this.trendingMovies;
       return this.trendingMovies.filter((movie) =>
         movie.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
 
-    filteredTrendingTVShows() {
+    filteredTrendingTVShows(): Item[] {
       if (!this.searchQuery) return this.trendingTVShows;
       return this.trendingTVShows.filter((show) =>
         (show.title || show.name)
@@ -105,55 +107,53 @@ export default Vue.extend({
       );
     },
 
-    filteredTrendingMoviesById() {
-      return this.filteredTrendingMovies.map((movie) => {
-        return {
-          id: movie.id,
-        };
-      });
+    filteredTrendingMoviesById(): { id: number }[] {
+      return this.filteredTrendingMovies.map((movie) => ({
+        id: movie.id,
+      }));
     },
 
-    filteredTrendingTVShowsById() {
-      return this.filteredTrendingTVShows.map((tv) => {
-        return {
-          id: tv.id,
-        };
-      });
+    filteredTrendingTVShowsById(): { id: number }[] {
+      return this.filteredTrendingTVShows.map((tv) => ({
+        id: tv.id,
+      }));
     },
 
-    listForNavigation() {
-      return [{ id: 110 }, { id: 120 }]
-        .concat(
-          this.filteredTrendingMoviesById.concat(
-            this.filteredTrendingTVShowsById
-          )
-        )
-        .flat();
+    listForNavigation(): { id: number }[] {
+      return [
+        { id: 110 },
+        { id: 120 },
+        ...this.filteredTrendingMoviesById,
+        ...this.filteredTrendingTVShowsById,
+      ];
     },
   },
   methods: {
-    async fetchTrendingMovies() {
+    async fetchTrendingMovies(): Promise<void> {
       await this.$store.dispatch(ACTIONS.FETCH_TRENDING_MOVIES);
     },
 
-    async fetchTrendingTVShows() {
+    async fetchTrendingTVShows(): Promise<void> {
       await this.$store.dispatch(ACTIONS.FETCH_TRENDING_TV_SHOWS);
     },
 
-    openDetailsDialog(itemProperties: { item: object; imageUrl: string }) {
+    openDetailsDialog(itemProperties: { item: Item; imageUrl: string }): void {
       if (this.$refs.detailsDialog) {
         this.item = itemProperties.item;
         this.imageUrl = itemProperties.imageUrl;
         this.isDialogOpen = true;
       }
     },
-    closeDetailsDialog() {
+
+    closeDetailsDialog(): void {
       this.isDialogOpen = false;
     },
-    toggleSearch() {
+
+    toggleSearch(): void {
       this.isSearchVisible = !this.isSearchVisible;
     },
-    handleKeyDown(event: KeyboardEvent) {
+
+    handleKeyDown(event: KeyboardEvent): void {
       const currentIndex = this.listForNavigation.findIndex(
         (item) => item.id === this.activeItemId
       );
@@ -161,9 +161,9 @@ export default Vue.extend({
       if (event.key === "Enter") {
         if (this.activeItemId === 110) {
           this.searchQuery = "";
-          this.$refs[this.activeItemId].focus();
+          (this.$refs[this.activeItemId] as HTMLElement).focus();
         } else if (this.activeItemId === 120) {
-          this.$refs[this.activeItemId].$el.click();
+          (this.$refs[this.activeItemId] as { $el: HTMLElement }).$el.click();
         } else {
           this.isKeyEntered = true;
         }

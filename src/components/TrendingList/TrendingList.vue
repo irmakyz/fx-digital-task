@@ -48,7 +48,7 @@ export default Vue.extend({
       required: true,
     },
     activeItemId: {
-      type: Number,
+      type: Number as () => number | null,
     },
     isKeyEntered: {
       type: Boolean,
@@ -61,8 +61,8 @@ export default Vue.extend({
     };
   },
   computed: {
-    focusedItem() {
-      return this.listItems.find((item) => item.id === this.activeItemId);
+    focusedItem(): Item | undefined {
+      return this.listItems.find((item: Item) => item.id === this.activeItemId);
     },
   },
   watch: {
@@ -81,7 +81,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    showDetails(item: Item) {
+    showDetails(item: Item): void {
       this.$emit("show-details", {
         item,
         imageUrl: `${this.baseUrl}w500${item.backdrop_path}`,
