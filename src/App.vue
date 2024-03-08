@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import HomePage from "./components/HomePage/HomePage.vue";
+const HomePage = () => import("@/components/HomePage/HomePage.vue");
 
 export default Vue.extend({
   name: "App",

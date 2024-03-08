@@ -56,8 +56,9 @@
 <script lang="ts">
 import Vue from "vue";
 import { mapState } from "vuex";
-import TrendingList from "../TrendingList/TrendingList.vue";
-import TrendingItemDetails from "../TrendingItemDetails/TrendingItemDetails.vue";
+const TrendingList = () => import("@/components/TrendingList/TrendingList.vue");
+const TrendingItemDetails = () =>
+  import("@/components/TrendingItemDetails/TrendingItemDetails.vue");
 
 import { ACTIONS } from "../../store/constants";
 export default Vue.extend({
@@ -190,7 +191,6 @@ export default Vue.extend({
     margin-bottom: 30px;
 
     @media (min-width: 1500px) {
-      // Adjust styles for screens larger than 1500px
       .v-text-field .v-label {
         font-size: 24px;
       }
@@ -202,7 +202,6 @@ export default Vue.extend({
     width: auto;
 
     @media (min-width: 1500px) {
-      // Adjust styles for screens larger than 1500px
       height: auto;
       max-height: fit-content;
       width: 300px;
@@ -211,7 +210,6 @@ export default Vue.extend({
 
   .home-page__search-icon {
     @media (min-width: 1500px) {
-      // Adjust styles for screens larger than 1500px
       font-size: 50px;
     }
   }

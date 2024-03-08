@@ -28,7 +28,6 @@
 </template>
 
 <script>
-// Destructure only the keys you want to use
 export default {
   name: "TrendingItemDetails",
   props: {
