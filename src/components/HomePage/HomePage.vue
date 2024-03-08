@@ -25,7 +25,7 @@
         id="120"
         :tabindex="activeItemId === 120 ? 0 : -1"
       >
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon class="home-page__search-icon">mdi-magnify</v-icon>
       </v-btn>
     </v-toolbar>
 
@@ -183,14 +183,37 @@ export default Vue.extend({
 <style scoped lang="scss">
 .home-page {
   padding: 30px;
+
   .home-page__toolbar {
     box-shadow: 0 4px 6px -6px black;
     background: transparent;
     margin-bottom: 30px;
+
+    @media (min-width: 1500px) {
+      // Adjust styles for screens larger than 1500px
+      .v-text-field .v-label {
+        font-size: 24px;
+      }
+    }
   }
+
   .home-page__toolbar-logo {
     max-height: 100%;
     width: auto;
+
+    @media (min-width: 1500px) {
+      // Adjust styles for screens larger than 1500px
+      height: auto;
+      max-height: fit-content;
+      width: 300px;
+    }
+  }
+
+  .home-page__search-icon {
+    @media (min-width: 1500px) {
+      // Adjust styles for screens larger than 1500px
+      font-size: 50px;
+    }
   }
 }
 </style>

@@ -2,27 +2,33 @@
   <v-dialog
     v-model="dialog"
     scrollable
-    max-width="300px"
     @click:outside="closeDialog"
+    content-class="item-details"
+    :max-width="responsiveWidth"
   >
-    <v-card class="mx-auto" max-width="344">
-      <v-img :src="imageUrl" height="200px"></v-img>
+    <v-card class="mx-auto">
+      <v-img :src="imageUrl"></v-img>
 
-      <v-card-title> {{ itemDetails.title }} </v-card-title>
+      <v-card-title class="item-details__title">
+        {{ itemDetails.title }}
+      </v-card-title>
 
-      <v-card-subtitle>
+      <v-card-subtitle class="item-details__subtitle">
         Released on {{ itemDetails.releaseDate }}</v-card-subtitle
       >
-      <v-card-subtitle>
+      <v-card-subtitle class="item-details__subtitle">
         Vote Average: {{ itemDetails.voteAvg }}</v-card-subtitle
       >
       <v-spacer></v-spacer>
-      <v-card-subtitle> {{ itemDetails.overview }}</v-card-subtitle>
+      <v-card-subtitle class="item-details__subtitle">
+        {{ itemDetails.overview }}</v-card-subtitle
+      >
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+// Destructure only the keys you want to use
 export default {
   name: "TrendingItemDetails",
   props: {
@@ -50,6 +56,22 @@ export default {
         voteAvg: this.item.vote_average,
       };
     },
+    responsiveWidth() {
+      switch (this.$vuetify.breakpoint.name) {
+        case "xs":
+          return 500;
+        case "sm":
+          return 500;
+        case "md":
+          return 1000;
+        case "lg":
+          return 1000;
+        case "xl":
+          return 1000;
+        default:
+          return 500;
+      }
+    },
   },
   methods: {
     closeDialog() {
@@ -58,7 +80,16 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-/* Your modal styling here */
+<style lang="scss" scoped>
+@media (min-width: 1500px) {
+  .item-details {
+    .item-details__subtitle {
+      font-size: 20px;
+    }
+    .item-details__title {
+      font-size: 25px;
+      padding-bottom: 30px;
+    }
+  }
+}
 </style>

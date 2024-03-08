@@ -106,7 +106,13 @@ export default Vue.extend({
     overflow-y: hidden;
     overflow-x: auto;
     padding-left: 0;
+
+    @media (max-width: 650px) {
+      flex-direction: column;
+      align-items: start;
+    }
   }
+
   .trending-list-item {
     display: flex;
     width: 250px;
@@ -114,7 +120,22 @@ export default Vue.extend({
     .item-image {
       object-fit: cover;
     }
+
+    @media (min-width: 3000px) {
+      width: 500px;
+    }
   }
+
+  .trending-list__title {
+    @media (min-width: 1500px) {
+      font-size: 40px;
+    }
+
+    @media (min-width: 3000px) {
+      font-size: 55px;
+    }
+  }
+
   .trending-list-item--selected {
     box-shadow: 0px -25px 11px 0px #82b1ff, 25px 0px 20px -20px #82b1ff,
       0px 25px 20px 1px #82b1ff, -25px 0px 20px -20px #82b1ff;
