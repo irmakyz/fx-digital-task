@@ -5,10 +5,7 @@ module.exports = defineConfig({
   transpileDependencies: ["vuetify"],
   configureWebpack: {
     optimization: {
-      minimizer: [
-        new TerserPlugin({
-        }),
-      ],
+      minimizer: [new TerserPlugin({})],
     },
   },
 });

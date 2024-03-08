@@ -14,6 +14,7 @@
           label="Search"
           single-line
           hide-details
+          :outlined="activeItemId === 110"
         ></v-text-field>
       </v-slide-x-reverse-transition>
 
@@ -158,7 +159,10 @@ export default Vue.extend({
       );
 
       if (event.key === "Enter") {
-        if (this.activeItemId === 120 || this.activeItemId === 110) {
+        if (this.activeItemId === 110) {
+          this.searchQuery = "";
+          this.$refs[this.activeItemId].focus();
+        } else if (this.activeItemId === 120) {
           this.$refs[this.activeItemId].$el.click();
         } else {
           this.isKeyEntered = true;
@@ -189,7 +193,6 @@ export default Vue.extend({
     box-shadow: 0 4px 6px -6px black;
     background: transparent;
     margin-bottom: 30px;
-
     @media (min-width: 1500px) {
       .v-text-field .v-label {
         font-size: 24px;
