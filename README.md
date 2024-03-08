@@ -1,5 +1,7 @@
 # fx-digital-smart-tv
 
+The app is developed by VueJS and TypeScript that integrates with the TMDB API and displays in rails today’s trending films and TV shows.
+
 ## Features
 
 ### 1. Trending Movies and TV Shows
