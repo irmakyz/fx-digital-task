@@ -14,11 +14,11 @@ Click on an item to see more details.
 Use the search bar to find specific movies or TV shows.
 Results update dynamically as you type.
 
-### 5. Keyboard Navigation
+### 3. Keyboard Navigation
 
 Navigate through the application using keyboard arrows and enter keys for accessibility.
 
-### 6. Item Details
+### 4. Item Details
 
 Clicking on an item opens a dialog with detailed information about the selected item.
 
